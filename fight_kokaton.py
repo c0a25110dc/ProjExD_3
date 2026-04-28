@@ -200,11 +200,11 @@ def main():
     #     bomb = Bomb((255, 0, 0), 10)
     #     bombs.appned(bomb)
 
-    # 課題2：Beamインスタンスを複数扱うための空のリストを作る
+    # 課題2
     beams = [] 
-    # 課題1：Scoreインスタンスの生成
+    # 課題1
     score = Score() 
-    # 課題3：Explosionインスタンス用の空リスト
+    # 課題3
     exps = []
 
     clock = pg.time.Clock()
@@ -214,14 +214,14 @@ def main():
             if event.type == pg.QUIT:
                 return
             if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
-                # 課題2：スペースキー押下でリストにappend
+                # 課題2
                 beams.append(Beam(bird))             
         screen.blit(bg_img, [0, 0])
 
         for bomb in bombs:
             if bomb is not None:
                 if bird.rct.colliderect(bomb.rct):
-                    # ゲームオーバー時に，こうかとん画像を切り替え，1秒間表示させる
+                    # ゲームオーバー時にこうかとん画像を切り替え
                     fonto = pg.font.Font(None, 80)
                     txt = fonto.render("Game Over", True, (255, 0, 0))
                     screen.blit(txt, [WIDTH//2-150, HEIGHT//2])
@@ -230,12 +230,12 @@ def main():
                     time.sleep(1)
                     return
         
-        # 課題2：リストの要素に対して二重ループで衝突判定
+        # 課題2：要素に対して二重ループ
         for i, bomb in enumerate(bombs):
             for j, beam in enumerate(beams):
                 if beam is not None and bomb is not None:
                     if beam.rct.colliderect(bomb.rct):  # 練習2：爆弾とビームの衝突判定
-                        # 課題3：bombとbeamが衝突したらインスタンスを生成
+                        # 課題3：衝突したらインスタンス
                         exps.append(Explosion(bomb))
                         
                         beams[j] = None
@@ -246,7 +246,7 @@ def main():
                         pg.display.update()#追加1
         
         bombs = [bomb for bomb in bombs if bomb is not None]
-        # 課題2：要素がNoneでないもの、画面内のものだけに更新
+        # 課題2：要素がNoneでないもの画面内のものだけに更新
         beams = [beam for beam in beams if beam is not None and check_bound(beam.rct) == (True, True)]
         # 課題3：lifeが0より大きいインスタンスだけのリストにする
         exps = [exp for exp in exps if exp.life > 0]
@@ -259,17 +259,14 @@ def main():
             beam.update(screen)
         for bomb in bombs:
             bomb.update(screen)
-        # 課題3：updateメソッドを呼び出して爆発を描画
+        # 課題3：updateを呼び出して爆発を
         for exp in exps:
             exp.update(screen)
-
-        # 課題1：updateメソッドを呼び出してスコアを表示
+        # 課題1：updateを呼び出してスコアを表示
         score.update(screen) 
-            
         pg.display.update()
         tmr += 1
         clock.tick(50)
-
 if __name__ == "__main__":
     pg.init()
     main()
