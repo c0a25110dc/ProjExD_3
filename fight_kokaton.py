@@ -85,20 +85,21 @@ class Bird:
         screen.blit(self.img, self.rct)
 
 
-class Beam:
+
+class Beam:#練習1
     """
     こうかとんが放つビームに関するクラス
     """
-    def __init__(self, bird:"Bird"):
+    def __init__(self, bird:"Bird"):#1
         """
         ビーム画像Surfaceを生成する
         引数 bird：ビームを放つこうかとん（Birdインスタンス）
         """
-        self.img = pg.image.load(f"fig/beam.png")
-        self.rct = self.img.get_rect()
-        self.rct.centery = bird.rct.centery  # ビームの中心縦座標 = こうかとんの中心縦座標
-        self.rct.left = bird.rct.right  # ビームの左座標 = こうかとんの右座標
-        self.vx, self.vy = +10, 0
+        self.img = pg.image.load(f"fig/beam.png")#画像ロード#1
+        self.rct = self.img.get_rect()#rectの取得#1
+        self.rct.centery = bird.rct.centery#ビーム、こうかとんの中心縦座標##1
+        self.rct .left = bird.rct.right#ビームの左座標＝こうかとんの右端座標# 1
+        self.vx, self.vy = +5, 0 #横に5、縦0の速度ベクトル#
 
     def update(self, screen: pg.Surface):
         """
@@ -145,7 +146,7 @@ def main():
     pg.display.set_caption("たたかえ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))    
     bg_img = pg.image.load("fig/pg_bg.jpg")
-    bird = Bird((300, 200))
+    bird = Bird((300, 200))#左辺呼び出し、右辺数値
     # bomb = Bomb((255, 0, 0), 10)
     bombs = [Bomb((255, 0, 0), 10) for _ in range(NUM_OF_BOMBS)]
     # for i in range(NUM_OF_BOMBS):
