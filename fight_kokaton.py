@@ -200,12 +200,10 @@ def main():
     #     bomb = Bomb((255, 0, 0), 10)
     #     bombs.appned(bomb)
 
-    # 課題2
-    beams = [] 
-    # 課題1
-    score = Score() 
-    # 課題3
-    exps = []
+
+    beams = []   # 課題2
+    score = Score() #課題1
+    exps = []# 課題3
 
     clock = pg.time.Clock()
     tmr = 0
@@ -214,8 +212,7 @@ def main():
             if event.type == pg.QUIT:
                 return
             if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
-                # 課題2
-                beams.append(Beam(bird))             
+                beams.append(Beam(bird))   # 課題2          
         screen.blit(bg_img, [0, 0])
 
         for bomb in bombs:
