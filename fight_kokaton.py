@@ -149,9 +149,9 @@ class Score:
     def __init__(self):
         # イニシャライザ
         self.fonto = pg.font.SysFont(None, 30) # フォントの設定
-        self.color = (0, 0, 255) # 文字色の設定：青
-        self.score = 0 # スコアの初期値の設定
-        # 文字列Surfaceの生成
+        self.color = (0, 0, 255) #青
+        self.score = 0 # スコアの初期値
+        # 文字列Surface
         self.img = self.fonto.render(f"Score: {self.score}", 0, self.color)
         # 文字列の中心座標：画面左下
         self.rct = self.img.get_rect()
@@ -163,6 +163,31 @@ class Score:
         """
         self.img = self.fonto.render(f"Score: {self.score}", 0, self.color)
         screen.blit(self.img, self.rct)
+
+
+# 課題3：Explosionクラスの追加
+class Explosion:
+    """
+    爆発エフェクトに関するクラス
+    """
+    def __init__(self, bomb: "Bomb"):
+        # イニシャライザ
+        img = pg.image.load("fig/explosion.gif")
+        # 元の画像と上下左右にflipした画像のリスト
+        self.imgs = [img, pg.transform.flip(img, True, True)]
+        # 爆発した爆弾のrct.centerに座標を設定
+        self.rct = img.get_rect()
+        self.rct.center = bomb.rct.center
+        # 表示時間（爆発時間）lifeを設定
+        self.life = 40
+
+    def update(self, screen: pg.Surface):
+        # 爆発経過時間lifeを1減算
+        self.life -= 1
+        # lifeが正なら、Surfaceリストを交互に切り替えて表示
+        if self.life > 0:
+            screen.blit(self.imgs[self.life // 10 % 2], self.rct)
+
 
 def main():
     pg.display.set_caption("たたかえ！こうかとん")
@@ -179,6 +204,9 @@ def main():
     beams = [] 
     # 課題1：Scoreインスタンスの生成
     score = Score() 
+    # 課題3：Explosionインスタンス用の空リスト
+    exps = []
+
     clock = pg.time.Clock()
     tmr = 0
     while True:
@@ -207,6 +235,9 @@ def main():
             for j, beam in enumerate(beams):
                 if beam is not None and bomb is not None:
                     if beam.rct.colliderect(bomb.rct):  # 練習2：爆弾とビームの衝突判定
+                        # 課題3：bombとbeamが衝突したらインスタンスを生成
+                        exps.append(Explosion(bomb))
+                        
                         beams[j] = None
                         bombs[i] = None
                         # 課題1：爆弾を打ち落としたらスコアアップ
@@ -215,21 +246,30 @@ def main():
                         pg.display.update()#追加1
         
         bombs = [bomb for bomb in bombs if bomb is not None]
-        # 課題2：要素がNoneでないもの、かつ画面内のものだけに更新
+        # 課題2：要素がNoneでないもの、画面内のものだけに更新
         beams = [beam for beam in beams if beam is not None and check_bound(beam.rct) == (True, True)]
+        # 課題3：lifeが0より大きいインスタンスだけのリストにする
+        exps = [exp for exp in exps if exp.life > 0]
+
         key_lst = pg.key.get_pressed()
         bird.update(key_lst, screen)
+
         # 課題2：リスト内の全ビーム
         for beam in beams:
             beam.update(screen)
         for bomb in bombs:
             bomb.update(screen)
+        # 課題3：updateメソッドを呼び出して爆発を描画
+        for exp in exps:
+            exp.update(screen)
+
         # 課題1：updateメソッドを呼び出してスコアを表示
         score.update(screen) 
             
         pg.display.update()
         tmr += 1
         clock.tick(50)
+
 if __name__ == "__main__":
     pg.init()
     main()
