@@ -229,7 +229,6 @@ def main():
                     pg.display.update()
                     time.sleep(1)
                     return
-        
         # 課題2：要素に対して二重ループ
         for i, bomb in enumerate(bombs):
             for j, beam in enumerate(beams):
@@ -237,7 +236,6 @@ def main():
                     if beam.rct.colliderect(bomb.rct):  # 練習2：爆弾とビームの衝突判定
                         # 課題3：衝突したらインスタンス
                         exps.append(Explosion(bomb))
-                        
                         beams[j] = None
                         bombs[i] = None
                         # 課題1：爆弾を打ち落としたらスコアアップ
@@ -246,9 +244,9 @@ def main():
                         pg.display.update()#追加1
         
         bombs = [bomb for bomb in bombs if bomb is not None]
-        # 課題2：要素がNoneでないもの画面内のものだけに更新
+        # 課題2
         beams = [beam for beam in beams if beam is not None and check_bound(beam.rct) == (True, True)]
-        # 課題3：lifeが0より大きいインスタンスだけのリストにする
+        # 課題3
         exps = [exp for exp in exps if exp.life > 0]
 
         key_lst = pg.key.get_pressed()
@@ -259,7 +257,7 @@ def main():
             beam.update(screen)
         for bomb in bombs:
             bomb.update(screen)
-        # 課題3：updateを呼び出して爆発を
+        # 課題3
         for exp in exps:
             exp.update(screen)
         # 課題1：updateを呼び出してスコアを表示
